@@ -5,7 +5,7 @@ describe('loadConfig', () => {
   it('returns defaults when no config file exists', () => {
     const cfg = loadConfig()
     expect(cfg.enabled).toBe(true)
-    expect(cfg.defaultMode).toBe('off')
+    expect(cfg.defaultMode).toBe('full')
     expect(cfg.features.caveman).toBe(true)
     expect(cfg.features.commit).toBe(true)
     expect(cfg.features.review).toBe(true)

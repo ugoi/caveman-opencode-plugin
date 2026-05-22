@@ -20,3 +20,27 @@ Rules:
   const example = examples[mode] || examples.full
   return `${base}\n${example}`
 }
+
+const tailReminders: Record<string, string> = {
+  lite: 'REMINDER — caveman LITE active. Tight prose, no filler/hedging/pleasantries. Full sentences kept. Apply from first token.',
+  full: 'REMINDER — caveman FULL active. Drop articles/filler/hedging/pleasantries. Fragments OK. Pattern: [thing] [action] [reason]. Code symbols exact.',
+  ultra: 'REMINDER — caveman ULTRA active. Drop articles/filler/hedging/pleasantries/conjunctions. Abbreviate prose. One word when enough. Code symbols exact.',
+}
+
+const userNudges: Record<string, string> = {
+  lite: '[caveman LITE active — tight prose, no filler, no hedging]',
+  full: '[caveman FULL active — drop articles/filler/hedging; fragments OK; pattern: thing action reason]',
+  ultra: '[caveman ULTRA active — drop articles/filler/hedging/conjunctions; abbreviate prose; one word when enough]',
+}
+
+export function getTailReminder(mode: string): string {
+  return tailReminders[mode] || tailReminders.full
+}
+
+export function getUserNudge(mode: string): string {
+  return userNudges[mode] || userNudges.full
+}
+
+export function getCompactionContext(mode: string): string {
+  return `IMPORTANT: caveman compression mode (${mode}) must be preserved in this summary. The agent must continue responding in caveman style after compaction.`
+}

@@ -1,6 +1,6 @@
 {
   "name": "caveman-opencode-plugin",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Caveman communication mode plugin for opencode",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,6 +22,6 @@
     "typescript": "6.0.3"
   },
   "keywords": ["opencode", "plugin", "caveman"],
-  "author": "renux918",
+  "author": "ugoi",
   "license": "MIT"
 }

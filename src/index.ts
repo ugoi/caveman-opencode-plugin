@@ -2,7 +2,7 @@ import type { Plugin, Hooks } from '@opencode-ai/plugin'
 import type { Part } from '@opencode-ai/sdk'
 import { loadConfig } from './config'
 import { getMode, setMode } from './state'
-import { getCavemanSystemInstruction } from './skills/caveman'
+import { getCavemanSystemInstruction, getTailReminder, getUserNudge, getCompactionContext } from './skills/caveman'
 import { handleCommit } from './commands/commit'
 import { handleReview } from './commands/review'
 
@@ -36,6 +36,44 @@ const cavemanPlugin: Plugin = async () => {
       }
 
       output.system.push(getCavemanSystemInstruction(mode))
+      output.system.push(getTailReminder(mode))
+    },
+
+    'experimental.chat.messages.transform': async (input: any, output: any) => {
+      const cfg = loadConfig()
+      if (!cfg.enabled || !cfg.features.caveman) return
+
+      const sessionID = input.sessionID
+      if (!sessionID) return
+
+      const mode = getMode(sessionID)
+      if (mode === 'off' || !mode) return
+
+      const last = output.messages?.[output.messages.length - 1]
+      if (!last?.parts) return
+
+      last.parts.push({
+        id: crypto.randomUUID(),
+        sessionID: last.info?.sessionID ?? sessionID,
+        messageID: last.info?.id ?? '',
+        type: 'text',
+        text: getUserNudge(mode),
+        synthetic: true,
+      })
+    },
+
+    'experimental.session.compacting': async (input: any, output: any) => {
+      const cfg = loadConfig()
+      if (!cfg.enabled || !cfg.features.caveman) return
+
+      const sessionID = input.sessionID
+      if (!sessionID) return
+
+      const mode = getMode(sessionID)
+      if (mode === 'off' || !mode) return
+
+      output.context = output.context ?? []
+      output.context.push(getCompactionContext(mode))
     },
 
     'command.execute.before': async (input, output) => {

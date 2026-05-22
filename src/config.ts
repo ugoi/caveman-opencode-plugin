@@ -15,7 +15,7 @@ export interface CavemanConfig {
 
 const defaults: CavemanConfig = {
   enabled: true,
-  defaultMode: 'off',
+  defaultMode: 'full',
   features: {
     caveman: true,
     commit: true,
